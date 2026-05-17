@@ -1,0 +1,167 @@
+/* ============================================================
+   TRADESFLOW DESIGN SYSTEM — Colors & Typography Tokens
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&display=swap');
+
+@font-face {
+  font-family: 'Inter';
+  src: url('fonts/Inter-VariableFont_opsz_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('fonts/Inter-Italic-VariableFont_opsz_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ============================================================
+   COLOR TOKENS
+   ============================================================ */
+
+:root {
+
+  /* --- Navy Palette --- */
+  --color-navy-900:    #0D1B2A;
+  --color-navy-800:    #1A2E45;
+  --color-navy-700:    #243B55;
+  --color-navy-600:    #2E4D6E;
+  --color-navy-400:    #5B7FA6;
+  --color-navy-200:    #A3BCDA;
+
+  /* --- Neutral --- */
+  --color-white:       #F8F9FA;
+  --color-off-white:   #E8ECF0;
+  --color-gray-100:    #F0F2F5;
+  --color-gray-200:    #D8DDE5;
+  --color-gray-500:    #7A8799;
+  --color-gray-800:    #2C3A4A;
+
+  /* --- Orange (Primary Accent) --- */
+  --color-orange:      #F5821F;
+  --color-orange-dark: #D96B0A;
+  --color-orange-pale: #FEF0E0;
+
+  /* --- Gold (Secondary Accent) --- */
+  --color-gold:        #F5A623;
+  --color-gold-dark:   #D4891A;
+
+  /* --- State Colors --- */
+  --color-green:       #2ECC71;
+  --color-red:         #E74C3C;
+
+  /* --- Semantic Aliases --- */
+  --bg-page:              var(--color-navy-900);
+  --bg-section-dark:      var(--color-navy-900);
+  --bg-section-mid:       var(--color-navy-800);
+  --bg-section-light:     var(--color-gray-100);
+  --bg-card-dark:         var(--color-navy-800);
+  --bg-card-light:        #FFFFFF;
+
+  --fg-primary-dark:      var(--color-white);
+  --fg-secondary-dark:    var(--color-navy-200);
+  --fg-muted-dark:        var(--color-navy-400);
+  --fg-primary-light:     var(--color-gray-800);
+  --fg-secondary-light:   var(--color-gray-500);
+
+  --border-dark:          rgba(255,255,255,0.08);
+  --border-light:         var(--color-gray-200);
+
+  --accent:               var(--color-orange);
+  --accent-hover:         var(--color-orange-dark);
+
+  /* ============================================================
+     TYPOGRAPHY TOKENS
+     ============================================================ */
+
+  --font-display:  'Barlow Condensed', system-ui, sans-serif;
+  --font-body:     'Inter', system-ui, sans-serif;
+
+  /* Scale (major third × 1.25 from 16px base) */
+  --text-xs:    0.75rem;    /*  12px */
+  --text-sm:    0.875rem;   /*  14px */
+  --text-base:  1rem;       /*  16px */
+  --text-lg:    1.125rem;   /*  18px */
+  --text-xl:    1.25rem;    /*  20px */
+  --text-2xl:   1.5rem;     /*  24px */
+  --text-3xl:   1.875rem;   /*  30px */
+  --text-4xl:   2.25rem;    /*  36px */
+  --text-5xl:   3rem;       /*  48px */
+  --text-6xl:   3.75rem;    /*  60px */
+  --text-7xl:   4.5rem;     /*  72px */
+  --text-8xl:   6rem;       /*  96px */
+
+  /* Display-specific (Barlow Condensed) */
+  --display-hero:     var(--text-8xl);
+  --display-title:    var(--text-6xl);
+  --display-subtitle: var(--text-4xl);
+  --display-section:  var(--text-3xl);
+
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+  --weight-extrabold:800;
+
+  --leading-tight:   1.1;
+  --leading-snug:    1.25;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.65;
+
+  --tracking-tight:  -0.02em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.04em;
+  --tracking-wider:   0.08em;
+
+  /* ============================================================
+     SPACING TOKENS (8px grid)
+     ============================================================ */
+
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  --section-padding-y: var(--space-20);
+  --content-max-width: 1200px;
+
+  /* ============================================================
+     BORDERS & RADII
+     ============================================================ */
+
+  --radius-sm:   4px;
+  --radius-md:   6px;
+  --radius-lg:   8px;
+  --radius-xl:  12px;
+  --radius-full: 9999px;
+
+  /* ============================================================
+     SHADOWS
+     ============================================================ */
+
+  --shadow-1: 0 2px 8px rgba(0,0,0,0.15);
+  --shadow-2: 0 8px 32px rgba(0,0,0,0.25);
+  --shadow-3: 0 16px 48px rgba(0,0,0,0.35);
+  --shadow-orange: 0 4px 20px rgba(245,130,31,0.40);
+
+  /* ============================================================
+     TRANSITIONS
+     ============================================================ */
+
+  --transition-fast:   150ms ease;
+  --transition-normal: 250ms ease;
+}

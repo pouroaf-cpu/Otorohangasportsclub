@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ōtorohanga Sports Club</title>
+  <link rel="icon" href="uploads/logo (1).jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #f0f2f5; color: #1e2855; min-height: 100vh; }
+    h1,h2,h3,h4 { font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.02em; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: 'Inter', sans-serif; }
+    input, select, textarea { font-family: 'Inter', sans-serif; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    .page-enter { animation: fadeIn 200ms ease forwards; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f0f2f5; }
+    ::-webkit-scrollbar-thumb { background: #c0c8d8; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script src="data.js"></script>
+  <script type="text/babel" src="components.jsx"></script>
+  <script type="text/babel" src="pages-public.jsx"></script>
+  <script type="text/babel" src="pages-people.jsx"></script>
+  <script type="text/babel" src="pages-admin.jsx"></script>
+  <script type="text/babel" src="pages-affiliations.jsx"></script>
+
+  <script type="text/babel">
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "navStyle": "classic",
+      "accentColor": "#e8a830",
+      "heroSize": "compact"
+    }/*EDITMODE-END*/;
+
+    // ── Preferences Panel ───────────────────────────────────────
+    function PreferencesPanel({ prefs, setPrefs, onClose }) {
+      const SPORTS = ['Rugby', 'Netball', 'Squash'];
+      const toggle = (s) => {
+        const next = prefs.includes(s) ? prefs.filter(x => x !== s) : [...prefs, s];
+        if (next.length === 0) return; // must keep at least one
+        setPrefs(next);
+        try { localStorage.setItem('otsc_prefs', JSON.stringify(next)); } catch(e) {}
+      };
+      return (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 200, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', background: 'rgba(0,0,0,0.4)' }} onClick={onClose}>
+          <div style={{ background: WHITE, borderRadius: '16px 16px 0 0', padding: '28px 24px 40px', width: '100%', maxWidth: 480, boxShadow: '0 -4px 32px rgba(0,0,0,0.2)' }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <div>
+                <h3 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 24, color: NAVY_DARK, textTransform: 'uppercase' }}>My Sports</h3>
+                <p style={{ fontSize: 13, color: GRAY, marginTop: 2 }}>Choose which codes to show across the site</p>
+              </div>
+              <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: 22, color: GRAY, cursor: 'pointer', padding: 4 }}>✕</button>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {SPORTS.map(s => {
+                const active = prefs.includes(s);
+                const c = SPORT_COLORS[s];
+                return (
+                  <button key={s} onClick={() => toggle(s)} style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '14px 18px', borderRadius: 10,
+                    border: `2px solid ${active ? c.bg : OFF_WHITE}`,
+                    background: active ? (s === 'Netball' ? '#fdf5e0' : s === 'Squash' ? '#e0f5ed' : '#eef0fa') : WHITE,
+                    cursor: 'pointer', transition: '150ms',
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      <div style={{ width: 36, height: 36, borderRadius: 8, background: active ? c.bg : OFF_WHITE, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>
+                        {s === 'Rugby' ? '🏉' : s === 'Netball' ? '🏐' : '🎾'}
+                      </div>
+                      <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 20, color: NAVY_DARK, textTransform: 'uppercase' }}>{s}</span>
+                    </div>
+                    <div style={{ width: 22, height: 22, borderRadius: '50%', border: `2px solid ${active ? c.bg : '#ccc'}`, background: active ? c.bg : 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      {active && <span style={{ color: s === 'Netball' ? NAVY_DARK : WHITE, fontSize: 13, fontWeight: 700 }}>✓</span>}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+            <p style={{ fontSize: 11, color: GRAY, marginTop: 16, textAlign: 'center' }}>Your preferences are saved in your browser.</p>
+          </div>
+        </div>
+      );
+    }
+
+    // ── Nav with prefs button ───────────────────────────────────
+    function NavWithPrefs({ page, setPage, isAdmin, currentUser, onPrefsOpen }) {
+      const [menuOpen, setMenuOpen] = React.useState(false);
+      const links = [
+        { id: 'home', label: 'Home' },
+        { id: 'scores', label: 'Scores' },
+        { id: 'fixtures', label: 'Fixtures' },
+        { id: 'live', label: 'Live' },
+        { id: 'affiliations', label: 'Bar Cards' },
+        { id: 'people', label: 'People' },
+        { id: 'about', label: 'About' },
+        { id: 'join', label: 'Join' },
+      ];
+      const btnBase = (active) => ({
+        background: active ? GOLD : 'none',
+        color: active ? NAVY_DARK : WHITE,
+        border: 'none', padding: '8px 10px', borderRadius: 6,
+        fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700,
+        fontSize: 14, letterSpacing: '0.04em', textTransform: 'uppercase',
+        transition: '150ms ease', position: 'relative', cursor: 'pointer',
+      });
+      return (
+        <nav style={{ background: NAVY_DARK, borderBottom: `3px solid ${GOLD}`, position: 'sticky', top: 0, zIndex: 100 }}>
+          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 60 }}>
+            <button onClick={() => setPage('home')} style={{ background: 'none', border: 'none', display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', flexShrink: 0 }}>
+              <img src="uploads/logo (1).jpg" alt="Ōtorohanga RFC" style={{ height: 40, width: 40, objectFit: 'contain', borderRadius: '50%' }} />
+              <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 18, color: WHITE, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                Ōtorohanga<span style={{ color: GOLD }}> SC</span>
+              </span>
+            </button>
+            {/* Desktop */}
+            <div style={{ display: 'flex', gap: 2, alignItems: 'center' }} className="desktop-nav">
+              {links.map(l => (
+                <button key={l.id} onClick={() => setPage(l.id)} style={btnBase(page === l.id)}>
+                  {l.label}
+                  {l.id === 'live' && <span style={{ position: 'absolute', top: 3, right: 3, width: 6, height: 6, borderRadius: '50%', background: '#e74c3c' }} />}
+                </button>
+              ))}
+              {/* Prefs */}
+              <button onClick={onPrefsOpen} title="My sport preferences" style={{ background: 'rgba(255,255,255,0.1)', color: WHITE, border: '1px solid rgba(255,255,255,0.15)', padding: '7px 10px', borderRadius: 6, marginLeft: 4, fontSize: 15, cursor: 'pointer' }}>⚙</button>
+              {/* Admin */}
+              <button onClick={() => setPage(isAdmin ? 'admin' : 'login')} style={{ background: isAdmin ? 'rgba(46,204,113,0.2)' : 'rgba(255,255,255,0.08)', color: isAdmin ? '#2ecc71' : WHITE, border: `1px solid ${isAdmin ? '#2ecc71' : 'rgba(255,255,255,0.15)'}`, padding: '7px 12px', borderRadius: 6, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.04em', textTransform: 'uppercase', marginLeft: 4, cursor: 'pointer' }}>
+                {isAdmin ? `⚙ ${currentUser?.name || 'Admin'}` : 'Login'}
+              </button>
+            </div>
+            <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: 'none', border: 'none', color: WHITE, fontSize: 24, display: 'none', cursor: 'pointer' }} className="hamburger">
+              {menuOpen ? '✕' : '☰'}
+            </button>
+          </div>
+          {menuOpen && (
+            <div style={{ background: NAVY_DARK, borderTop: `1px solid rgba(255,255,255,0.08)`, padding: '8px 12px 20px' }}>
+              {links.map(l => (
+                <button key={l.id} onClick={() => { setPage(l.id); setMenuOpen(false); }} style={{ display: 'block', width: '100%', textAlign: 'left', background: page === l.id ? GOLD : 'none', color: page === l.id ? NAVY_DARK : WHITE, border: 'none', padding: '12px 14px', borderRadius: 6, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 17, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: 4, cursor: 'pointer' }}>{l.label}</button>
+              ))}
+              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                <button onClick={() => { onPrefsOpen(); setMenuOpen(false); }} style={{ flex: 1, background: 'rgba(255,255,255,0.1)', color: WHITE, border: 'none', padding: '12px', borderRadius: 6, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15, cursor: 'pointer' }}>⚙ My Sports</button>
+                <button onClick={() => { setPage(isAdmin ? 'admin' : 'login'); setMenuOpen(false); }} style={{ flex: 1, background: isAdmin ? 'rgba(46,204,113,0.2)' : 'rgba(255,255,255,0.1)', color: isAdmin ? '#2ecc71' : WHITE, border: 'none', padding: '12px', borderRadius: 6, fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700, fontSize: 15, cursor: 'pointer' }}>{isAdmin ? 'Admin' : 'Login'}</button>
+              </div>
+            </div>
+          )}
+          <style>{`
+            @media (max-width: 900px) { .desktop-nav { display: none !important; } .hamburger { display: block !important; } }
+          `}</style>
+        </nav>
+      );
+    }
+
+    // ── App ─────────────────────────────────────────────────────
+    function App() {
+      const [page, setPage] = React.useState(() => sessionStorage.getItem('otsc_page') || 'home');
+      const [currentUser, setCurrentUser] = React.useState(() => {
+        try { const u = sessionStorage.getItem('otsc_user'); return u ? JSON.parse(u) : null; } catch(e) { return null; }
+      });
+      const [prefs, setPrefs] = React.useState(() => {
+        try { const p = localStorage.getItem('otsc_prefs'); return p ? JSON.parse(p) : ['Rugby','Netball','Squash']; } catch(e) { return ['Rugby','Netball','Squash']; }
+      });
+      const [showPrefs, setShowPrefs] = React.useState(false);
+      const [showTweaks, setShowTweaks] = React.useState(false);
+      const [tweaks, setTweaks] = React.useState(TWEAK_DEFAULTS);
+
+      const isAdmin = !!currentUser;
+
+      React.useEffect(() => { sessionStorage.setItem('otsc_page', page); }, [page]);
+
+      const navigate = (p) => { setPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+
+      const handleLogin = (user) => {
+        sessionStorage.setItem('otsc_user', JSON.stringify(user));
+        setCurrentUser(user);
+        navigate('admin');
+      };
+      const handleLogout = () => {
+        sessionStorage.removeItem('otsc_user');
+        setCurrentUser(null);
+        navigate('home');
+      };
+
+      React.useEffect(() => {
+        const handler = (e) => {
+          if (e.data?.type === '__activate_edit_mode') setShowTweaks(true);
+          if (e.data?.type === '__deactivate_edit_mode') setShowTweaks(false);
+        };
+        window.addEventListener('message', handler);
+        window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+        return () => window.removeEventListener('message', handler);
+      }, []);
+
+      const setTweak = (k, v) => {
+        const updated = typeof k === 'object' ? { ...tweaks, ...k } : { ...tweaks, [k]: v };
+        setTweaks(updated);
+        window.parent.postMessage({ type: '__edit_mode_set_keys', edits: updated }, '*');
+      };
+
+      // Pass prefs down to pages that use them
+      const renderPage = () => {
+        const wrap = (el) => <div key={page} className="page-enter">{el}</div>;
+        switch(page) {
+          case 'home':         return wrap(<HomePage setPage={navigate} prefs={prefs} />);
+          case 'scores':       return wrap(<ScoresPage prefs={prefs} />);
+          case 'fixtures':     return wrap(<FixturesPage prefs={prefs} />);
+          case 'live':         return wrap(<LiveGamesPage />);
+          case 'affiliations': return wrap(<AffiliationsPage />);
+          case 'people':       return wrap(<PeoplePage />);
+          case 'about':        return wrap(<AboutPage />);
+          case 'join':         return wrap(<JoinPage />);
+          case 'login':        return wrap(<LoginPage onLogin={handleLogin} />);
+          case 'admin':        return isAdmin ? wrap(<AdminPanel currentUser={currentUser} onLogout={handleLogout} />) : wrap(<LoginPage onLogin={handleLogin} />);
+          default:             return wrap(<HomePage setPage={navigate} prefs={prefs} />);
+        }
+      };
+
+      const showFooter = page !== 'admin' && page !== 'login';
+
+      return (
+        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+          <NavWithPrefs page={page} setPage={navigate} isAdmin={isAdmin} currentUser={currentUser} onPrefsOpen={() => setShowPrefs(true)} />
+          <main style={{ flex: 1 }}>{renderPage()}</main>
+          {showFooter && <Footer setPage={navigate} />}
+
+          {showPrefs && <PreferencesPanel prefs={prefs} setPrefs={setPrefs} onClose={() => setShowPrefs(false)} />}
+
+          {showTweaks && (
+            <div style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 9999, background: 'white', borderRadius: 12, padding: 20, width: 260, boxShadow: '0 8px 32px rgba(0,0,0,0.2)', border: '1px solid #e0e4eb' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 18, color: '#1e2855', letterSpacing: '0.04em' }}>TWEAKS</span>
+                <button onClick={() => { setShowTweaks(false); window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*'); }} style={{ background: 'none', border: 'none', fontSize: 18, cursor: 'pointer', color: '#888' }}>✕</button>
+              </div>
+              <div style={{ marginBottom: 14 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#555', marginBottom: 6 }}>ACCENT COLOUR</label>
+                <input type="color" value={tweaks.accentColor} onChange={e => setTweak('accentColor', e.target.value)} style={{ width: '100%', height: 36, borderRadius: 6, border: '1px solid #e0e4eb', cursor: 'pointer' }} />
+              </div>
+              <div style={{ marginBottom: 14 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#555', marginBottom: 6 }}>HERO SIZE</label>
+                <div style={{ display: 'flex', gap: 6 }}>
+                  {['compact','large'].map(v => <button key={v} onClick={() => setTweak('heroSize', v)} style={{ flex: 1, padding: '8px', borderRadius: 6, border: `1.5px solid ${tweaks.heroSize === v ? '#1e2855' : '#e0e4eb'}`, background: tweaks.heroSize === v ? '#1e2855' : 'white', color: tweaks.heroSize === v ? 'white' : '#333', fontSize: 13, fontWeight: 600, cursor: 'pointer', textTransform: 'capitalize' }}>{v}</button>)}
+                </div>
+              </div>
+              <div style={{ paddingTop: 14, borderTop: '1px solid #f0f2f5', fontSize: 11, color: '#aaa', textAlign: 'center', lineHeight: 1.6 }}>
+                <strong style={{ color: '#555', display: 'block', marginBottom: 4 }}>Admin Accounts</strong>
+                admin / OtoroAdmin25 (super)<br />
+                rugby / Rugby2025<br />
+                netball / Netball2025<br />
+                squash / Squash2025
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
